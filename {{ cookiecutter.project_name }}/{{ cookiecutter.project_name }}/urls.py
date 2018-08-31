@@ -3,7 +3,7 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
-from apps.logs.schema import schema
+from apps.{{ cookiecutter.app_name }}.schema import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
