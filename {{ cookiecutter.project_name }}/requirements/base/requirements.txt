@@ -3,3 +3,4 @@ graphene-django
 pytz
 djangorestframework
 graphene-django-extras
+django-model-utils

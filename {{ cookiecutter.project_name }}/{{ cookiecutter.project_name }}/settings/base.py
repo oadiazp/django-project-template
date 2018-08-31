@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    '{{ cookiecutter.app_name }}'
+    'apps.{{ cookiecutter.app_name }}',
 
     'graphene_django',
     'rest_framework',
