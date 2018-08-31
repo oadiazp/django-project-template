@@ -75,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'somosmas_logs.wsgi.application'
+WSGI_APPLICATION = '{{ cookiecutter.project_name }}.wsgi.application'
 
 
 # Database
