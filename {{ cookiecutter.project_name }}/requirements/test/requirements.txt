@@ -1,0 +1,5 @@
+-r ../base/requirements.txt
+
+pytest
+pytest-django
+pytest-cov
