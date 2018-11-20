@@ -129,7 +129,7 @@ STATIC_URL = '/static/'
 
 GRAPHENE = {
     'SCHEMA_INDENT': 4,
-    'SCHEMA': 'apps.logs.schema.schema',
+    'SCHEMA': 'apps.{{ cookiecutter.app_name }}.schema.schema',
     'MIDDLEWARE': [
         'graphene_django_extras.ExtraGraphQLDirectiveMiddleware'
     ]
