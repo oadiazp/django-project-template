@@ -1,5 +1,7 @@
 {
 	"project_name": "",
+	"project_owner": "",
+	"deployment_host": "",
 	"app_name": "",
 	"secret_key": "",
 	"env": ""
