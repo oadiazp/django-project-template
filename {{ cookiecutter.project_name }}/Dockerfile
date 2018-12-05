@@ -1,8 +1,8 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
-MAINTAINER Omar Antonio Diaz <zcool2005@gmail.com>
+MAINTAINER {{ cookiecutter.author }} <{{ cookiecutter.email }}>
 
-ENV DJANGO_SETTINGS_MODULE {{ cookiecutter.project_name }}.settings.live
+ENV DJANGO_SETTINGS_MODULE {{ cookiecutter.project_name }}.settings.{{ env }}
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -14,32 +14,57 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN apt-get install -y python-virtualenv \
-	python3-dev \
-	build-essential \
-    apt-utils \
     python3-dev \
+    build-essential \
+    apt-utils \
+    python3.5-dev \
+    gettext \
     gcc \
     libpq-dev \
-    libffi-dev \
+    libffi-dev \ 
+    npm \ 
+    ruby-full \
     zlib1g-dev \ 
     libssl-dev \
     libpcre3-dev \
-    sudo
+    git \
+    sudo \
+    nginx
 
-RUN mkdir -p /home/docker/src
+RUN mkdir /home/docker
 RUN virtualenv -p python3 /home/docker/venv
 
+RUN mkdir /root/.ssh
+RUN mkdir /home/docker/src
+
 WORKDIR /home/docker/src
+RUN rm /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
 COPY conf/uwsgi.ini /home/docker/src
 COPY conf/uwsgi_params /home/docker/src
+COPY conf/nginx.conf /etc/nginx
+COPY conf/nginx-app.conf /etc/nginx/sites-enabled
 ADD . .
 
 RUN . /home/docker/venv/bin/activate; \
-      pip install -r /home/docker/src/requirements/{{ cookiecutter.env }}/requirements.txt;
+      pip install -r /home/docker/src/requirements/{{ env }}.txt;
+
+#RUN ln -s /usr/bin/nodejs /usr/bin/node
+#RUN ln -s /node_modules/coffee-script/bin/coffee /usr/bin/coffee
+#
+#RUN apt-get install -y yui-compressor
+#RUN gem install sass
+#
+#RUN coffee -c .
+#RUN sass --update apps/core/static/sass:apps/core/static/sass
+
+RUN . /home/docker/venv/bin/activate; \
+#    python /home/docker/src/manage.py compilemessages; \
+    python /home/docker/src/manage.py collectstatic --clear --traceback --noinput;
 
 RUN chown www-data:www-data -R /home/docker
 
-CMD DJANGO_SETTINGS_MODULE={{cookiecutter.project_name}}.settings.{{ cookiecutter.env }} /home/docker/venv/bin/python /home/docker/src/manage.py createcachetable & \
-    DJANGO_SETTINGS_MODULE={{cookiecutter.project_name}}.settings.{{ cookiecutter.env }} /home/docker/venv/bin/python /home/docker/src/manage.py collectstatic --clear --traceback --noinput & \
-    DJANGO_SETTINGS_MODULE={{cookiecutter.project_name}}.settings.{{ cookiecutter.env }} /home/docker/venv/bin/python /home/docker/src/manage.py migrate & \
-    sudo -u www-data /home/docker/venv/bin/uwsgi --ini /home/docker/src/uwsgi.ini
+CMD DJANGO_SETTINGS_MODULE={{ cookiecutter.project_name }}.settings.{{ env }} /home/docker/venv/bin/python /home/docker/src/manage.py createcachetable & \
+    sudo -u www-data /home/docker/venv/bin/uwsgi --ini /home/docker/src/uwsgi.ini & \
+    nginx
+    
