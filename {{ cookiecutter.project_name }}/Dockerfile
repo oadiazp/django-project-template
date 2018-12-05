@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER {{ cookiecutter.author }} <{{ cookiecutter.email }}>
+MAINTAINER Omar Diaz <zcool2005@gmail.com>
 
 ENV DJANGO_SETTINGS_MODULE {{ cookiecutter.project_name }}.settings.{{ env }}
 
