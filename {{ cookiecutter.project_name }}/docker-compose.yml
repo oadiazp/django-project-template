@@ -1,17 +1,29 @@
-version: '3.1'
+version: '3.2'
 
 services:
+  aaa:
+    image: registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest
+    ports:
+      - 2000:80
+    networks:
+      - {{ cookiecutter.project_name }}_net
+    depends_on:
+      - pgsql
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+  pgsql:
+    image: postgres
+    networks:
+      - {{ cookiecutter.project_name }}_net
+    environment:
+      POSTGRES_PASSWORD: s7RXvwMyR9WfQmx88evkhUk85
+      POSTGRES_DB: {{ cookiecutter.project_name }}
     volumes:
-      - ./esdata:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
+      - clients_data:/var/lib/postgresql/data
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.1
-    links:
-      - elasticsearch:elasticsearch
-    ports:
-      - 5601:5601
+networks:
+  {{ cookiecutter.project_name }}_net:
+    external: true
+
+volumes:
+  {{ cookiecutter.project_name }}_data:
+    external: true
