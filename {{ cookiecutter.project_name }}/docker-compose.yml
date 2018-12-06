@@ -4,7 +4,7 @@ services:
   aaa:
     image: registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest
     ports:
-      - 2000:80
+      - {{ cookiecutter.port }}:80
     networks:
       - {{ cookiecutter.project_name }}_net
     depends_on:
@@ -18,7 +18,7 @@ services:
       POSTGRES_PASSWORD: s7RXvwMyR9WfQmx88evkhUk85
       POSTGRES_DB: {{ cookiecutter.project_name }}
     volumes:
-      - clients_data:/var/lib/postgresql/data
+      - {{ cookiecutter.project_name }}_data:/var/lib/postgresql/data
 
 networks:
   {{ cookiecutter.project_name }}_net:

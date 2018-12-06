@@ -4,5 +4,6 @@
 	"deployment_host": "",
 	"app_name": "",
 	"secret_key": "",
+	"port": "",
 	"env": ""
 }
