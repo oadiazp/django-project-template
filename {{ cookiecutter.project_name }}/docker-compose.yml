@@ -1,7 +1,7 @@
 version: '3.2'
 
 services:
-  aaa:
+  {{ cookiecutter.project_name }}:
     image: registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest
     ports:
       - {{ cookiecutter.port }}:80
@@ -22,8 +22,6 @@ services:
 
 networks:
   {{ cookiecutter.project_name }}_net:
-    external: true
 
 volumes:
   {{ cookiecutter.project_name }}_data:
-    external: true

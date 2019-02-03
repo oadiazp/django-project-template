@@ -17,8 +17,4 @@
  deploy:
   script:
      - scp docker-compose.yml root@{{ cookiecutter.deployment_host }}:/tmp/{{ cookiecutter.project_name }}.yml
-     - ssh "root@{{ cookiecutter.deployment_host }}" docker stack rm {{ cookiecutter.project_name }}
-     - ssh "root@{{ cookiecutter.deployment_host }}" docker network rm {{ cookiecutter.project_name }}_net
-     - ssh "root@{{ cookiecutter.deployment_host }}" docker network create --driver overlay --attachable {{ cookiecutter.project_name }}_net
-     - ssh "root@{{ cookiecutter.deployment_host }}" docker volume create {{ cookiecutter.project_name }}_data
-     - ssh "root@{{ cookiecutter.deployment_host }}" docker stack deploy --compose-file=/tmp/{{ cookiecutter.project_name }}.yml aaa
+     - ssh "root@{{ cookiecutter.deployment_host }}" docker stack deploy --compose-file=/tmp/{{ cookiecutter.project_name }}.yml {{ cookiecutter.project_name }}

@@ -6,7 +6,7 @@ DATABASES = {
         'HOST': 'pgsql',
         'USER': 'postgres',
         'PASSWORD': 's7RXvwMyR9WfQmx88evkhUk85',
-        'NAME': 'clients',
+        'NAME': '{{ cookiecutter.project_name }}',
         'ATOMIC_REQUESTS': True,
     }
 }

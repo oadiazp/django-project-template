@@ -40,12 +40,12 @@ COPY conf/nginx-app.conf /etc/nginx/sites-enabled
 ADD . .
 
 RUN . /home/docker/venv/bin/activate; \
-      pip install -r /home/docker/src/requirements/live/requirements.txt;
+      pip install -r /home/docker/src/requirements/live/requirements.txt; \
+      /home/docker/venv/bin/python /home/docker/src/manage.py collectstatic --clear --traceback --noinput;
 
 RUN chown www-data:www-data -R /home/docker
 
 CMD DJANGO_SETTINGS_MODULE={{ cookiecutter.project_name }}.settings.live /home/docker/venv/bin/python /home/docker/src/manage.py createcachetable & \
-    DJANGO_SETTINGS_MODULE= {{ cookiecutter.project_name }}.settings.live /home/docker/venv/bin/python /home/docker/src/manage.py collectstatic --clear --traceback --noinput & \
     DJANGO_SETTINGS_MODULE={{ cookiecutter.project_name }}.settings.live /home/docker/venv/bin/python /home/docker/src/manage.py migrate & \
     sudo -u www-data /home/docker/venv/bin/uwsgi --ini /home/docker/src/uwsgi.ini & \
     sudo nginx
