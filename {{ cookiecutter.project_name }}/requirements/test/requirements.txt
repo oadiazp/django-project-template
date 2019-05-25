@@ -3,3 +3,6 @@
 pytest
 pytest-django
 pytest-cov
+mixer
+pylint
+behave-django
