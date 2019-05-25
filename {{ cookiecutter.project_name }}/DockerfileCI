@@ -1,0 +1,11 @@
+FROM python:3
+
+ENV DJANGO_SETTINGS_MODULE=asterisk_abstraction_layer.settings.test
+
+RUN mkdir /src
+WORKDIR /src
+ADD . .
+RUN pip install -r requirements/test/requirements.txt
+
+CMD python manage.py behave & \
+    pytest apps/

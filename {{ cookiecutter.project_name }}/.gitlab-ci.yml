@@ -1,20 +1,33 @@
- before_script:
-   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-   - eval $(ssh-agent -s)
-   - echo "$PRIV_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
-   - mkdir -p ~/.ssh
-   - chmod 700 ~/.ssh
-   - echo "$KNOWN_HOST_KEY" > ~/.ssh/known_hosts
-   - chmod 644 ~/.ssh/known_hosts
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "$PRIV_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "$KNOWN_HOST_KEY" > ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
 
- build_image:
-   script:
-     - docker build -t registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest -t registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:$CI_COMMIT_SHA .
-     - docker push registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest
-     - docker push registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:$CI_COMMIT_SHA
+stages:
+  - run_tests
+  - build_image
+  - deploy
 
- deploy:
+build_image:
+  stage: build_image
   script:
-     - scp docker-compose.yml root@{{ cookiecutter.deployment_host }}:/tmp/{{ cookiecutter.project_name }}.yml
-     - ssh "root@{{ cookiecutter.deployment_host }}" docker stack deploy --compose-file=/tmp/{{ cookiecutter.project_name }}.yml {{ cookiecutter.project_name }}
+    - docker build -t registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest -t registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:$CI_COMMIT_SHA .
+    - docker push registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest
+    - docker push registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:$CI_COMMIT_SHA
+  only:
+    - master
+
+deploy:
+  stage: deploy
+  script:
+    - scp docker-compose.yml root@{{ cookiecutter.deployment_host }}:/tmp/{{ cookiecutter.project_name }}.yml
+    - ssh "root@{{ cookiecutter.deployment_host }}" docker stack deploy --compose-file=/tmp/{{ cookiecutter.project_name }}.yml {{ cookiecutter.project_name }}
+  only:
+    - master
+  dependencies:
+    - run_tests
