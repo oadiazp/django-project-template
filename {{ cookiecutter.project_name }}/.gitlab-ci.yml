@@ -22,6 +22,12 @@ build_image:
   only:
     - master
 
+run_tests:
+  stage: run_tests
+  script:
+    - docker build -t {{ cookiecutter.project_owner }}_test:latest  . --file DockerfileCI
+    - docker run {{ cookiecutter.project_owner }}_test
+
 deploy:
   stage: deploy
   script:
