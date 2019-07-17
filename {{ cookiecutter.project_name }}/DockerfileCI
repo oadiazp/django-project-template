@@ -1,6 +1,6 @@
 FROM python:3
 
-ENV DJANGO_SETTINGS_MODULE=asterisk_abstraction_layer.settings.test
+ENV DJANGO_SETTINGS_MODULE={{ cookiecutter.project_name }}.settings.test
 
 RUN mkdir /src
 WORKDIR /src
