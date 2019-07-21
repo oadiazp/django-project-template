@@ -8,3 +8,7 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+INSTALLED_APPS += [
+    'behave_django',
+]

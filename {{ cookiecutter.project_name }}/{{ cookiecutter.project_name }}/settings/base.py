@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 
     'graphene_django',
     'rest_framework',
-    'behave_django',
 
     'django.contrib.admin',
     'django.contrib.auth',
