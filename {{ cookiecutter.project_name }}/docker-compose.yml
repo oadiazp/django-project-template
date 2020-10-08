@@ -6,9 +6,29 @@ services:
     ports:
       - {{ cookiecutter.port }}:80
     networks:
+      - traefik
       - {{ cookiecutter.project_name }}_net
     depends_on:
       - pgsql
+    deploy:
+      replicas: 2
+      labels:
+        traefik.enable: 'true'
+        traefik.http.services.{{ cookiecutter.project_name }}.loadbalancer.server.port: '80'
+
+        swarmpit.service.deployment.autoredeploy: 'true'
+
+        traefik.http.routers.{{ cookiecutter.project_name }}-https.tls: 'true'
+        traefik.http.routers.{{ cookiecutter.project_name }}-https.rule: Host(`{{ cookiecutter.host }}`)
+        traefik.http.routers.{{ cookiecutter.project_name }}-https.entrypoints: https
+        traefik.http.routers.{{ cookiecutter.project_name }}-https.service: {{ cookiecutter.project_name }}
+        traefik.http.routers.{{ cookiecutter.project_name }}-https.tls.certresolver: letsencrypt
+
+        traefik.http.routers.{{ cookiecutter.project_name }}-http.entrypoints: http
+        traefik.http.routers.{{ cookiecutter.project_name }}-http.rule: Host(`{{ cookiecutter.host }}`)
+        traefik.http.routers.{{ cookiecutter.project_name }}-http.service: {{ cookiecutter.project_name }}
+        traefik.http.routers.{{ cookiecutter.project_name }}-http.middlewares: {{ cookiecutter.project_name }}-https-redirect
+        traefik.http.middlewares.{{ cookiecutter.project_name }}-https-redirect.redirectscheme.scheme: https
 
   pgsql:
     image: postgres
