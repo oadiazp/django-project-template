@@ -19,13 +19,13 @@ services:
         swarmpit.service.deployment.autoredeploy: 'true'
 
         traefik.http.routers.{{ cookiecutter.project_name }}-https.tls: 'true'
-        traefik.http.routers.{{ cookiecutter.project_name }}-https.rule: Host(`{{ cookiecutter.host }}`)
+        traefik.http.routers.{{ cookiecutter.project_name }}-https.rule: Host(`{{ cookiecutter.deployment_host }}`)
         traefik.http.routers.{{ cookiecutter.project_name }}-https.entrypoints: https
         traefik.http.routers.{{ cookiecutter.project_name }}-https.service: {{ cookiecutter.project_name }}
         traefik.http.routers.{{ cookiecutter.project_name }}-https.tls.certresolver: letsencrypt
 
         traefik.http.routers.{{ cookiecutter.project_name }}-http.entrypoints: http
-        traefik.http.routers.{{ cookiecutter.project_name }}-http.rule: Host(`{{ cookiecutter.host }}`)
+        traefik.http.routers.{{ cookiecutter.project_name }}-http.rule: Host(`{{ cookiecutter.deployment_host }}`)
         traefik.http.routers.{{ cookiecutter.project_name }}-http.service: {{ cookiecutter.project_name }}
         traefik.http.routers.{{ cookiecutter.project_name }}-http.middlewares: {{ cookiecutter.project_name }}-https-redirect
         traefik.http.middlewares.{{ cookiecutter.project_name }}-https-redirect.redirectscheme.scheme: https
