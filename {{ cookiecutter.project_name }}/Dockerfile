@@ -13,7 +13,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN apt-get install -y python-virtualenv \
+RUN apt install -y python-virtualenv \
     python3-dev \
     build-essential \
     apt-utils \

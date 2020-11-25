@@ -1,15 +1,11 @@
-version: '3.2'
+version: '3.7'
 
 services:
   {{ cookiecutter.project_name }}:
     image: registry.gitlab.com/{{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}:latest
-    ports:
-      - {{ cookiecutter.port }}:80
     networks:
       - traefik
       - {{ cookiecutter.project_name }}_net
-    depends_on:
-      - pgsql
     deploy:
       replicas: 2
       labels:
@@ -42,6 +38,8 @@ services:
 
 networks:
   {{ cookiecutter.project_name }}_net:
+  traefik:
+    external: true
 
 volumes:
   {{ cookiecutter.project_name }}_data:
