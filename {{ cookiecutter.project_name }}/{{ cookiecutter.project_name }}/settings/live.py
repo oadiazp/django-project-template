@@ -1,15 +1,18 @@
 from .base import *
+from apps.utils import get_secret
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'pgsql',
-        'USER': 'postgres',
-        'PASSWORD': 's7RXvwMyR9WfQmx88evkhUk85',
-        'NAME': '{{ cookiecutter.project_name }}',
+        'HOST': get_secret('DB_HOST'),
+        'USER': get_secret('DB_USER'),
+        'PASSWORD': get_secret('{{ cookiecutter.project_name|upper }}_DB_PASSWORD'),
+        'NAME': get_secret('DB_NAME'),
         'ATOMIC_REQUESTS': True,
     }
 }
+
+SECRET_KEY = get_secret('{{ cookiecutter.project_name|upper }}_SECRET_KEY'),
 
 INSTALLED_APPS += [
     'raven.contrib.django.raven_compat',
