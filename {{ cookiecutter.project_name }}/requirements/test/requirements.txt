@@ -9,3 +9,4 @@ behave-django
 pytest-pep8
 pytest-flakes
 jsonpath-ng
+autopep8
