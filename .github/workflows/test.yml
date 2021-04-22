@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  cicd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: pip install -r requirements/test/requirements.txt
+      - name: Run static code analysis
+        run: flake8 .
+      - name: Run unit tests
+        run: pytest
+      - name: Run BDD tests
+        env:
+          DJANGO_SETTINGS_MODULE: {{ cookiecutter.project_name }}.settings.test
+        run: python3 manage.py behave
+      - name: Build docker image
+        run: docker build -t {{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }} .
+      - name: Log in
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Push docker image
+        run: docker push {{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}
+

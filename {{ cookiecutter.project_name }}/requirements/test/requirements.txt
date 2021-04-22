@@ -6,7 +6,6 @@ pytest-cov
 mixer
 pylint
 behave-django
-pytest-pep8
-pytest-flakes
 jsonpath-ng
 autopep8
+flake8

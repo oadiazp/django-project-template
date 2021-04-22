@@ -15,6 +15,10 @@ build_image:
 
 run_tests:
   stage: run_tests
+  variables:
+    DJANGO_SETTINGS_MODULE: {{ cookiecutter.project_name }}.settings.test
   script:
-    - docker build -t {{ cookiecutter.project_name }}_test:latest  . --file DockerfileCI
-    - docker run {{ cookiecutter.project_name }}_test
+    - pip install -r requirements/test/requirements.txt
+    - flake8 .
+    - pytest
+    - ./manage.py behave
