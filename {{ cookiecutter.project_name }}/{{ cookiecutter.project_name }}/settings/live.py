@@ -1,4 +1,4 @@
-from .base import *
+from .base import * # noqa
 from apps.utils import get_secret
 
 DATABASES = {

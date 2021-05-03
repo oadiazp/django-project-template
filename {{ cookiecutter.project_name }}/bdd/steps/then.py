@@ -1,6 +1,6 @@
 from json import loads
 
-from behave import *
+from behave import use_step_matcher, step, then
 from django.http import HttpResponse
 from jsonpath_ng import parse
 from pytest import fail

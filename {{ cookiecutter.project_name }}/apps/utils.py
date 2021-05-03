@@ -5,5 +5,5 @@ def get_secret(secret, default=None):
     try:
         with open(f'/run/secrets/{secret}', 'r') as f:
             return f.read()
-    except:
+    except OSError:
         return default if default else getenv(secret)
