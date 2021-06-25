@@ -20,7 +20,7 @@ jobs:
       - name: Build docker image
         run: docker build -t {{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }} .
       - name: Log in
-        run: docker login -u  "${{" secrets.DOCKERHUB_USERNAME "}}" -p "${{"" secrets.DOCKERHUB_PASSWORD "}}"
+        run: docker login -u  "${{" secrets.DOCKERHUB_USERNAME "}}" -p "${{" secrets.DOCKERHUB_PASSWORD "}}"
       - name: Push docker image
         run: docker push {{ cookiecutter.project_owner }}/{{ cookiecutter.project_name }}
 
