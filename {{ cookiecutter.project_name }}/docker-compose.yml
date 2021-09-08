@@ -6,6 +6,11 @@ services:
     networks:
       - traefik
       - {{ cookiecutter.project_name }}_net
+    environment:
+      DB_HOST: pgsql
+      DB_USER: postgres
+      {{ cookiecutter.project_name | upper }}_DB_PASSWORD: s7RXvwMyR9WfQmx88evkhUk85
+      DB_NAME: {{ cookiecutter.project_name }}
     deploy:
       replicas: 2
       labels:
