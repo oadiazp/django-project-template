@@ -1,5 +1,4 @@
 import graphene
-from graphene_django_extras import DjangoObjectType
 
 
 # class Queries(graphene.ObjectType):
