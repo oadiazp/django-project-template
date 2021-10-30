@@ -3,5 +3,6 @@
 	"project_owner": "",
 	"deployment_host": "",
 	"app_name": "",
-	"secret_key": ""
+	"secret_key": "",
+	"sentry_url": ""
 }

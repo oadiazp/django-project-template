@@ -1,5 +1,8 @@
 from .base import * # noqa
 from apps.utils import get_secret
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 DATABASES = {
     'default': {
@@ -14,20 +17,25 @@ DATABASES = {
 
 SECRET_KEY = get_secret('{{ cookiecutter.project_name|upper }}_SECRET_KEY'),
 
-INSTALLED_APPS += [
-    'raven.contrib.django.raven_compat',
-]
+sentry_sdk.init(
+    dsn="{{ cookiecutter.sentry_url }}",
+    integrations=[DjangoIntegration()],
 
-# import raven
-#
-# VERSION = '0.1'
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production,
+    traces_sample_rate=1.0,
 
-# RAVEN_CONFIG = {
-#     'dsn': 'https://0110f857397d4e1c8c6473dccb085fed:2769b5d3d1f440eda1eaf4109fa02caa@sentry.io/1197976',
-#     # If you are using git, you can also automatically configure the
-#     # release based on the git info.
-#     'release': VERSION,
-# }
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+
+    # By default the SDK will try to use the SENTRY_RELEASE
+    # environment variable, or infer a git commit
+    # SHA as release, however you may want to set
+    # something more human-readable.
+    # release="myapp@1.0.0",
+)
 
 DEBUG = False
 
