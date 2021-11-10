@@ -112,5 +112,5 @@ def step_impl(context, amount, path):
 
     assert len(result) == amount, f"""
 Actual amount: {len(result)}
-Expected amount: {amount}, 
+Expected amount: {amount},
     """
